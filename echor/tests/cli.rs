@@ -3,8 +3,7 @@ use std::fs;
 use assert_cmd::Command;
 use predicates::prelude::*;
 
-// This will be a custom type of error, since we can rely on the custom Error method
-// We can create our own Result type.
+// This will be a custom type of error
 type TestResult = Result<(), Box<dyn std::error::Error>>;
 
 // CONST -> An unchangeable value (the common case)
@@ -12,6 +11,9 @@ const FILE1: &str = "tests/expected/hello1.txt";
 
 //STATIC -> A possibly mutable variable with 'static lifetime
 static FILE2: &str = "tests/expected/hello2.txt";
+
+const FILE3: &str = "tests/expected/hello1.n.txt";
+const FILE4: &str = "tests/expected/hello2.n.txt";
 
 // To run this test, we can run 'cargo test dies', and Cargo will run all
 // The test that include the string 'dies'
@@ -76,4 +78,14 @@ fn hello1() -> TestResult {
 #[test]
 fn hello2() -> TestResult {
     run(&["Hello", "there"], FILE2)
+}
+
+#[test]
+fn hello3() -> TestResult {
+    run(&["Hello  there", "-n"], FILE3)
+}
+
+#[test]
+fn hello4() -> TestResult {
+    run(&["-n", "Hello", "there"], FILE4)
 }
